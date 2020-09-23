@@ -4,3 +4,7 @@ Dabbled in using the `lcc` compiler to compile `ebm.c`. Wouldn't work, and only 
 - Strange issues with scope. Seems to be breaking when i reference global level structs from inside the function scope, but not arrays. None of this breaks on a standard C compiler.
 
 I think next steps are going to be amassing documentation. This project is old and the help is probably limited, so it's probably worth padding out my understanding with what I can find rather than getting frustrated. Also, I need to get Make up and running on windows (just for fun).
+
+Looks like I was wrong about the method thing.
+Compiler seems to be a path issue, can use it when compiling directly from the distro.
+ ``C:\Users\punchcafe\Downloads\gbdk-2.95-3-win32\gbdk> .\bin\lcc .\examples\gb\ebm.c -o ebm.gb``
