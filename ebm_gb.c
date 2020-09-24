@@ -59,7 +59,34 @@ void load_next_beat(struct BeatManager* beat_manager, struct Beat *beat){
     beat_manager->next_beat_index++;
 }
 
+void burn_down_beat_delay(struct Beat * beat){
+    // If the while condition is > 1 this will fail
+    while(beat->delay > 2){
+            delay(1000UL);
+            printf("delay loop!\n");
+            printf("Beat: delay, %u duration, %u\n", beat->delay, beat->duration);
+            if(beat->delay > 5){
+                beat->delay = 0x08u;
+                printf("first block\n");
+                printf("check it %u\n", beat->delay);
+                beat->delay = beat->delay - 0x04u;
+            } else {
+                printf("else block\n");
+                beat->delay = 0x01u;
+            }
+            printf("out of if: %u\n", beat->delay);
+            /**
+             * Something seems to reset beat.delay
+             */
+    }
+}
 
+void burn_down_beat_duration(struct Beat * beat){
+    while(beat->duration > 1u){
+        printf("Beat: delay, %u duration, %u\n", beat->delay, beat->duration);
+        beat->duration--;
+    }
+}
 
 void main(void){
     
@@ -96,29 +123,9 @@ void main(void){
         // ANY VAR Declaration here creates error
         // SOMETHING HERE RESETS DELAY
         
-        while((&beat)->delay > 1){
-            // Something happens, CPU optimisation??
-            printf("delay loop!\n");
-            printf("Beat: delay, %u duration, %u\n", beat.delay, beat.duration);
-            if((&beat)->delay > 5){
-                (&beat)->delay = 0x08u;
-                printf("first block\n");
-                printf("check it %u\n", (&beat)->delay);
-                (&beat)->delay = (&beat)->delay - 0x04u;
-            } else {
-                printf("else block\n");
-                (&beat)->delay = 0x01u;
-            }
-            printf("out of if: %u\n", (&beat)->delay);
-            /**
-             * Something seems to reset beat.delay
-             */
-        }
+        burn_down_beat_delay(&beat);
         printf("****!!!!****");
-        while(beat.duration > 1u){
-            printf("Beat: delay, %u duration, %u\n", beat.delay, beat.duration);
-            beat.duration--;
-        }
+        burn_down_beat_duration(&beat);
         printf("*******");
         load_next_beat(&beat_manager, &beat);
     }
