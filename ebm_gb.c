@@ -102,6 +102,9 @@ void main(void){
     /* Load this one with dk grey background and white foreground */
     color(WHITE, DKGREY, SOLID);
     
+    line(0x04,0x04, 0x40, 0x04);
+    delay(100Lu);
+
     min_font = font_load(font_min);
 
     /* Turn scrolling off (why not?) */
