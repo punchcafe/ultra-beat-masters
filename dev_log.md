@@ -16,4 +16,68 @@ Compiler seems to be a path issue, can use it when compiling directly from the d
  - https://gbdev.gg8.se/wiki/articles/GBDK_Sprite_Tutorial
  - https://gbdev.gg8.se/wiki/articles/Main_Page
  - https://gbdev.gg8.se/wiki/articles/Video_Display
+ - https://gbdev.gg8.se/wiki/articles/Game_Boy_Tile_Designer
+ - http://www.devrs.com/gb/hmgd/gbtd.html
  It's super cool to see some of the level of granularity of the sprite methods. `UINT`s are handled in hex to specifically set bit flags for determining behaviour of sprites, and all sorts. It's really cool.
+
+ ### Oct. 18th
+
+ What the fuck? This doesn't compile:
+ ```
+    if(beat->state == AWAITING){
+        //printf("%u/n", beat->delay);
+        //printf("%u/n", 50u <= 1u);
+        printf("%u/n", delta);
+        //printf("%u/n", (beat->delay) <= 1u);
+        int lol = beat->delay;
+```
+but this does?
+```
+    if(beat->state == AWAITING){
+        //printf("%u/n", beat->delay);
+        //printf("%u/n", 50u <= 1u);
+        printf("%u/n", delta);
+        //printf("%u/n", (beat->delay) <= 1u);
+        int lol = beat->delay;
+```
+seems like a reoccuring bug is a scopte block, starting with prints, and then initializing a function seems to break it.
+
+another example:
+
+```
+
+void burn_down_beat(struct Beat* beat, unsigned int delta){
+        
+    
+    if(beat->state == AWAITING){
+        int cached_delay = beat->delay;
+        int cached_delta = delta;
+        //printf("%u/n", beat->delay);
+        //printf("%u/n", 50u <= 1u);
+        //printf("%u/n", delta);
+        //printf("%u/n", (beat->delay) <= 1u);
+        // IF I LEAVE THIS PRINT STATEMENT IN< IT WORKS. OTHERWSE IT BREAKS
+        printf("%u!",cached_delay <= cached_delta);
+        
+        if(cached_delay <= delta){
+            printf("i am fired!");
+            beat->delay = 0;
+            beat->state = ACTIVE;
+            return;
+        } else {
+            printf("oh hi");
+            beat->delay -= delta;
+            return;
+        }
+    } else if(beat->state == ACTIVE){
+        if(beat->duration <= delta){
+            beat->duration = 0;
+            beat->state = FINISHED;
+            return;
+        } else {
+            beat->duration -= delta;
+            return;
+        }
+    }
+}
+```
